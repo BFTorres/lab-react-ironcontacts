@@ -24,7 +24,7 @@ import contacts from "./contacts.json";
 class App extends React.Component {
   //IT1
       state = {
-        contacts: contacts.slice(0, 5)
+        contacts: contacts.slice(0, 10) //5
 }
 // IT2
  handleRandom = () => {
@@ -55,11 +55,11 @@ handlePopularity = () => {
   const {contacts} = this.state;
   let clonedConts = JSON.parse(JSON.stringify(contacts))
   clonedConts.sort((a, b) => {
-    if (a.popularity> b.popularity) {
-      return 1;
+    if (a.popularity > b.popularity) {
+      return -1;
     }
     else if (a.popularity < b.popularity){
-      return -1;
+      return 1;
     } 
     else {
       return 0
@@ -69,12 +69,21 @@ handlePopularity = () => {
 }
 
 // IT4 
-
+handleDelete = (someId) => {
+  const {contacts} = this.state
+  let filteredConts = contacts.filter((singleContact) => {
+      // return is a condition on how to filter elements 
+      return singleContact.id !== someId
+  })
+  this.setState({
+      contacts: filteredConts
+  })
+}
 
 render() {
   const { contacts } = this.state;
   return(
-    <div>
+    <div >
         <h1>IronContacts</h1>
           <thead>
             <tr>
@@ -101,6 +110,9 @@ render() {
               </td>
               <td>
               {contact.popularity}
+              </td>
+              <td>
+              <button onClick={() => this.handleDelete(contact.id)}>Delete</button>
               </td>
             </tr>
           )
